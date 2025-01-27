@@ -7,13 +7,13 @@ const routes = {
   stable: {
     url: 'https://charts.helm.sh/stable',
     replaces: {
-      'charts.helm.sh': '$host',
+      'charts.helm.sh': 'https://cloudflare-helm-proxy.hydrovolter.workers.dev/',
     },
   },
   incubator: {
     url: 'https://charts.helm.sh/incubator',
     replaces: {
-      'charts.helm.sh': '$host',
+      'charts.helm.sh': 'https://cloudflare-helm-proxy.hydrovolter.workers.dev/',
     },
   },
   grafana: {
@@ -25,7 +25,7 @@ const routes = {
   prometheus: {
     url: 'https://prometheus-community.github.io/helm-charts',
     replaces: {
-      'prometheus-community.github.io/helm-charts': '$host/prometheus',
+      'prometheus-community.github.io/helm-charts': 'https://cloudflare-helm-proxy.hydrovolter.workers.dev//prometheus',
     },
   },
   'k8s-at-home': {
@@ -75,7 +75,7 @@ async function handleRequest(event) {
               case 'text/yaml':
                 let respStr = await resp.text()
                 for (let [o, n] of Object.entries(value.replaces)) {
-                  n = n.replaceAll('$host', url.hostname)
+                  n = n.replaceAll('https://cloudflare-helm-proxy.hydrovolter.workers.dev/', url.hostname)
                   respStr = respStr.replaceAll(o, n)
                   console.log(`replace ${o} to ${n} in ${mirrorUrl} response`)
                 }
